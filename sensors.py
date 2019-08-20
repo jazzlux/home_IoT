@@ -4,30 +4,39 @@ from database import Database
 
 
 class ConnToSensors(mqtt.Client):
-    database = Database("newdb.db")
 
-    # def on_connect(self, mqttc, obj, flags, rc):
-    #     print("rc: "+str(rc))
+
+    def __init__(self, server, port, database_name, user="", password=""):
+        super().__init__()
+        self.server = server
+        self.port = port
+        self.user = user
+        self.password = password
+        self.database = Database(database_name)
+
+    def on_connect(self, mqttc, obj, flags, rc):
+        print("rc: "+str(rc))
+
+    def on_subscribe(self, mqttc, obj, mid, granted_qos):
+        print("Subscribed: "+str(mid)+" "+str(granted_qos))
 
     def on_message(self, mqttc, obj, msg):
-        print(msg.topic+" "+str(msg.qos)+" "+str(msg.payload))
+        self.dict_msg = []
+        #print(msg.topic+" "+str(msg.qos)+" "+str(msg.payload))
+        #print(self.database.view_table()
+        self.dict_msg.append(msg.topic)
+        self.dict_msg.append(msg.payload)
+
+        return self.dict_msg
+
+        #self.database.insert(str(msg.topic)=float(msg.payload))
 
 
-    # def on_publish(self, mqttc, obj, mid):
-    #     print("mid: "+str(mid))
-
-    # def on_subscribe(self, mqttc, obj, mid, granted_qos):
-    #     print("Subscribed: "+str(mid)+" "+str(granted_qos))
-
-    # def quick_pub(self, topic, message):
-    #     self.username_pw_set("dvukmvfa","JpfjsyzaE7Le")
-    #     self.connect("m24.cloudmqtt.com", 17208, 60)
-    #     self.publish(topic, message)
-
-    def run_sub(self, user, password):
-        self.username_pw_set(user, password)
-        self.connect("m24.cloudmqtt.com", 17208, 60)
-        self.subscribe("swiatlo", 1)
+    def run_sub(self, sub_topic):
+        self.username_pw_set(self.user, self.password)
+        self.connect(self.server, self.port, 60)
+        #self.loop()
+        self.subscribe(sub_topic, 1)
 
         rc = 0
         while rc == 0:
@@ -38,10 +47,11 @@ class ConnToSensors(mqtt.Client):
 
 
 
-mqttc = ConnToSensors()
 
-rc = mqttc.run_sub("dvukmvfa","JpfjsyzaE7Le")
-print("rc: "+str(rc))
+# mqttc = ConnToSensors("m24.cloudmqtt.com", 17208, "newdb.db", "dvukmvfa","JpfjsyzaE7Le")
+#
+# rc = mqttc.run_sub("sensors/#")
+
 
 
 

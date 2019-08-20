@@ -54,6 +54,8 @@ client.connect("192.168.1.85", 1883, 60)
 client.loop_forever()
 
 
+
+
 #zeby latwo sie dodawalo funkcjonalnosc do backendu - wiecej relay's, wiecej sensorow etc
 #sensor object - dodaje odczyt do database,
 #relay object
