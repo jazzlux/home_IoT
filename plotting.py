@@ -31,6 +31,8 @@ class Plotting:
         #df_thresh = df[4].clip(lower=24, upper=None)
         #replace weird spikes, manual way but for now has to be OK
 
+        #zamienić [1] pozycje w database na cos co moglbym zdefiniowac z zewnatrz ?
+
         rep = self.dataFrame()[4].replace([0.4, 12.4, 9.2, 11.4, 11.0], method='bfill')
         #print(rep.min())
         plt.style.use('bmh')
@@ -44,5 +46,7 @@ class Plotting:
         plt.gca().xaxis.set_major_formatter(date_format)
         plt.show()
 
-ploting = Plotting("oop.db")
-ploting.temp_hum()
+
+if __name__=='__main__':
+    ploting = Plotting("oop.db")
+    ploting.temp_hum()
