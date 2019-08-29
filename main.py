@@ -10,8 +10,7 @@ print(data.view_table())
 #if __name__ == '__main__':
 
 wykres = Plotting('newdb.db')
-wykres.temp_hum()
-
+wykres.temp_hum() #plt.show() in plotting
 
 
     # def on_message(self, mqttc, obj, msg):
@@ -22,12 +21,6 @@ wykres.temp_hum()
     #     self.dict_msg.append(msg.payload)
     #
     #     print(self.dict_msg)
-
-
-
-
-
-
 
 
 
