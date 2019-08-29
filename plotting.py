@@ -6,7 +6,6 @@ import matplotlib.dates as mdates
 from matplotlib.animation import FuncAnimation
 from database import Database
 import pygal
-from bokeh.embed import json_item
 from bokeh.plotting import figure
 
 
