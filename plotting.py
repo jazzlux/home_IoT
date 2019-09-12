@@ -75,14 +75,13 @@ class Plotting:
         self.x = x
         self.y = y
         self.df = self.dataFrame()
-
     #b= df.Series(pd.date_range('20130101 09:10:12', periods=4))
     #print(a.iterrows())
-        self.p=figure(plot_width=800, plot_height=250, x_axis_type="datetime")
+        self.p=figure(plot_height=250, sizing_mode='scale_width', x_axis_type="datetime")
+        #self.p=figure(plot_width=400, plot_height=250, x_axis_type="datetime")
 
         self.p.line(self.df[x],self.df[y])
-
-        self.p.xaxis.formatter=DatetimeTickFormatter(hours=["%H:%M"])
+        #self.p.xaxis.formatter=DatetimeTickFormatter(hours=["%H:%M"])
     #p.line(dates,df[3])
         #output_file("Line.html")
         return self.p

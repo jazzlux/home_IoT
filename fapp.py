@@ -37,26 +37,26 @@ def root():
     return render_template('home.html')
 
 
-@app.route('/plt')
-def b_graph():
-    bkh = Plotting('oop.db')
-    rend = bkh.bokeh_plot(1, 3)
-    script, div = components(rend)
-
-    return render_template("home.html", div=div, script=script)
+# @app.route('/plt')
+# def b_graph():
+#     bkh = Plotting('oop.db')
+#     rend = bkh.bokeh_plot(1, 3)
+#     script, div = components(rend)
+#
+#     return render_template("home.html", div=div, script=script)
 
 
 @app.route('/pl')
 def pl_bokeh_js():
     bkh = Plotting('oop.db')
-    rend2 = bkh.bokeh_plot(1, 2)
-    return json.dumps(json_item(rend2, "myplot"))
+    rend1 = bkh.bokeh_plot(1, 2)
+    return json.dumps(json_item(rend1))
 
 @app.route('/pl2')
 def pl_bokeh_js2():
     bkh = Plotting('oop.db')
     rend2 = bkh.bokeh_plot(1, 3)
-    return json.dumps(json_item(rend2, "myplot2"))
+    return json.dumps(json_item(rend2))
 
 if __name__=='__main__':
     app.run(debug=True)

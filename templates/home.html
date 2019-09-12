@@ -1,37 +1,58 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
+{% extends "layout.html" %}
+{% block graphs %}
 
-    <title>home IoT</title>
-    <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-tables-1.0.4.min.css" type="text/css">
-    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.js"></script>
-    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-api-1.0.4.min.js"></script>
-    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.js"></script>
-    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-tables-1.0.4.min.js"></script>
-  </head>
-  <body>
-<div class='bokeh'>
-    {{div|safe }}
+<title>home IoT</title>
 
-    {{script|safe }}
+<h1>home IoT</h1>
+
+<div class="container">
+  <div class="row">
+      <div class="col">
+      </div>
+      <div class="col">
+      </div>
+  </div>
+
+
+
+    <div class="row">
+      <div class="col" style="margin-bottom: 50px;" >
+
+
+            <div id="myplot"><p>temperature</p></div>
+
+    </div>
+
+    <div class="col">
+
+      <div class="card">
+        <div class="card-body">
+          <div id="myplot2"><p>humidity</p></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
 
-<div id="myplot"></div>
-<div id="myplot2"> </div>
+<!-- <div class='bokeh'>
+    {{div|safe }}
+    {{script|safe }}
+</div> -->
+
+
+
 
   <script>
   fetch('/pl')
     .then(function(response) { return response.json(); })
-    .then(function(item) { Bokeh.embed.embed_item(item); })
+    .then(function(item) { Bokeh.embed.embed_item(item, "myplot"); })
   </script>
   <script>
   fetch('/pl2')
     .then(function(response) { return response.json(); })
-    .then(function(item) { Bokeh.embed.embed_item(item); })
+    .then(function(item) { Bokeh.embed.embed_item(item, "myplot2"); })
   </script>
 
-  </body>
-</html>
+
+{% endblock graphs%}
