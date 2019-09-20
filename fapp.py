@@ -9,6 +9,16 @@ from bokeh.resources import CDN
 import json
 from bokeh.embed import json_item
 from bokeh.embed import components
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+server_id = os.getenv("SERVER_ID")
+port_no = os.getenv("PORT_NO")
+server_user = os.getenv("SERVER_USER")
+server_key = os.getenv("SERVER_KEY")
+
+print(server_id, port_no, server_user, server_key)
 
 
 app = Flask(__name__)
@@ -35,6 +45,14 @@ def graph():
 @app.route('/')
 def root():
     return render_template('home.html')
+
+@app.route('/temp_out')
+def temp_outside():
+    import ConnToSensors
+    tmp_out=ConnToSensors(server_id, port_no, "newdb.db", server_user,server_key)
+    msg_loop= temp_out.run_sub("sensors/#")
+    return json.dumps(tmp_out.on_message())
+
 
 
 # @app.route('/plt')

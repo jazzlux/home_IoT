@@ -55,8 +55,3 @@ class ConnToSensors(mqtt.Client):
 if __name__ == '__main__':
     mqttc = ConnToSensors("m24.cloudmqtt.com", 17208, "newdb.db", "dvukmvfa","JpfjsyzaE7Le")
     rc = mqttc.run_sub("sensors/#")
-
-
-#database
-#ploting?
-#mqtt
