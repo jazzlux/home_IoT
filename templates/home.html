@@ -17,7 +17,8 @@
 
   <div class="row"style="margin-bottom: 50px;">
     <div class="col">
-      <h3>temperature outside : 22.4</h3>
+      <div id="temp" style="margin-bottom: 50px;"><h3>temperature outside </h3></div>
+
       </div>
 
 
@@ -51,6 +52,13 @@
 
 
 
+
+  <script>
+  fetch('/temp_out')
+    .then(function(response) { return response.json(); })
+    .then(function(json) { console.log(json); })
+
+  </script>
 
   <script>
   fetch('/pl')

@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 from database import Database
 import os
+import asyncio
 
 
 
@@ -41,15 +42,21 @@ class ConnToSensors(mqtt.Client):
 
 
 
+
     def run_sub(self, sub_topic):
         self.username_pw_set(self.user, self.password)
         self.connect(self.server, self.port, 60)
         self.subscribe(sub_topic, 1)
+        print('subscribed this')
+        self.loop_start()
 
-        rc = 0
-        while rc == 0:
-            rc = self.loop()
-        return rc
+        # rc = 0
+        # while rc == 0:
+        #     rc = self.loop()
+        #print("pp")
+        #self.loop_stop()
+
+        #return rc
 
 
 if __name__ == '__main__':

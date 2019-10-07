@@ -11,47 +11,62 @@ from bokeh.embed import json_item
 from bokeh.embed import components
 from dotenv import load_dotenv
 import os
+import multiprocessing
+import gevent
+from gevent import sleep
 
 load_dotenv()
 server_id = os.getenv("SERVER_ID")
-port_no = os.getenv("PORT_NO")
+port_no = int(os.getenv("PORT_NO"))
 server_user = os.getenv("SERVER_USER")
 server_key = os.getenv("SERVER_KEY")
 
-print(server_id, port_no, server_user, server_key)
+print(server_id, int(port_no), server_user, server_key)
 
 
 app = Flask(__name__)
 #bootstrap = Bootstrap(app)
 
-@app.route('/plot')
-def plot_matlib():
-    grf=Plotting('oop.db')
-    img = io.BytesIO()
-    grf.temp_hum()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode()
+# @app.route('/plot')
+# def plot_matlib():
+#     grf=Plotting('oop.db')
+#     img = io.BytesIO()
+#     grf.temp_hum()
+#     plt.savefig(img, format='png')
+#     img.seek(0)
+#     plot_url = base64.b64encode(img.getvalue()).decode()
+#
+#     return '<img src="data:image/png;base64,{}">'.format(plot_url)
 
-    return '<img src="data:image/png;base64,{}">'.format(plot_url)
 
-
-@app.route('/pygal_graph')
-def graph():
-    grf=Plotting('oop.db')
-    ff = grf.pygal_graph()
-    return ff.render_response()
+# @app.route('/pygal_graph')
+# def graph():
+#     grf=Plotting('oop.db')
+#     ff = grf.pygal_graph()
+#     return ff.render_response()
 
 @app.route('/')
 def root():
     return render_template('home.html')
 
+
+
 @app.route('/temp_out')
 def temp_outside():
-    import ConnToSensors
+    from mqtt_connection import ConnToSensors
     tmp_out=ConnToSensors(server_id, port_no, "newdb.db", server_user,server_key)
-    msg_loop= temp_out.run_sub("sensors/#")
-    return json.dumps(tmp_out.on_message())
+    #print("proba" + json.dumps(tmp_out.run_sub("sensors/#")))
+    msg_loop= tmp_out.run_sub("sensors/#")
+
+    # print(tmp_out.on_message())
+    # return jsonify(msg_loop)
+    return json.dumps(msg_loop)
+    sleep(1)
+
+
+job1 = gevent.spawn(temp_outside)
+gevent.wait([job1])
+
 
 
 
@@ -62,7 +77,6 @@ def temp_outside():
 #     script, div = components(rend)
 #
 #     return render_template("home.html", div=div, script=script)
-
 
 @app.route('/pl')
 def pl_bokeh_js():
