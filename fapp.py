@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, Response, render_template
 #from flask_bootstrap import Bootstrap
 from plotting import Plotting
 import io
@@ -14,6 +14,9 @@ import os
 import multiprocessing
 import gevent
 from gevent import sleep
+import random
+
+random.seed()
 
 load_dotenv()
 server_id = os.getenv("SERVER_ID")
@@ -49,10 +52,38 @@ app = Flask(__name__)
 def root():
     return render_template('home.html')
 
+# @app.route('/tes')
+# def test_json():
+#     from mqtt_connection import ConnToSensors
+#
+#     tmp_out=ConnToSensors(server_id, port_no, "newdb.db", server_user,server_key)
+#     msg_tes= tmp_out.call_web()
+#     print(msg_tes)
+#     return json.dumps(msg_tes)
+@app.route('/stream')
+def chart_data():
+    def generate_random_data():
+        import mqtt_connection
+        while True:
+            y = str(mqtt_connection.temp_call())
+            print(y)
+            # rndm = int(random.random() * 100)
+
+            json_data = json.dumps(
+                {'value': str(y)})
+            yield f"data:{json_data}\n\n"
+            # json_data = json.dumps(
+            #     {'value': rndm})
+            # yield f"data:{json_data}\n\n"
+            # #print(int(random.random() * 100))
+            sleep(3)
+
+    return Response(generate_random_data(), mimetype='text/event-stream')
 
 
 @app.route('/temp_out')
 def temp_outside():
+
     from mqtt_connection import ConnToSensors
     tmp_out=ConnToSensors(server_id, port_no, "newdb.db", server_user,server_key)
     #print("proba" + json.dumps(tmp_out.run_sub("sensors/#")))
@@ -60,12 +91,14 @@ def temp_outside():
 
     # print(tmp_out.on_message())
     # return jsonify(msg_loop)
+
     return json.dumps(msg_loop)
     sleep(1)
 
 
 job1 = gevent.spawn(temp_outside)
-gevent.wait([job1])
+job2 = gevent.spawn(chart_data)
+gevent.wait([job1, job2])
 
 
 

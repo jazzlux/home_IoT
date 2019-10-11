@@ -1,9 +1,12 @@
 import paho.mqtt.client as mqtt
 from database import Database
 import os
-import asyncio
 
 
+payload = 0
+
+def temp_call():
+    return payload
 
 class ConnToSensors(mqtt.Client):
 
@@ -24,14 +27,24 @@ class ConnToSensors(mqtt.Client):
         print("Subscribed: "+str(mid)+" "+str(granted_qos))
 
 
+
     def on_message(self, mqttc, obj, msg):
+        global payload
+        #self.call_web()
         #print(msg.topic+" "+str(msg.qos)+" "+str(msg.payload))
-        #print(self.database.view_table()
+        #print(self.database.view_table())
 
         #print(topic)
         topic = os.path.basename(msg.topic)
-        print(topic,  msg.payload)
+        #print(msg.payload)
+        #odczyt = self.call_web(msg.payload)
+
+
+
+        #print (next(odczyt))
+        #print(topic,  msg.payload)
         if topic == "temperature" :
+            payload = msg.payload.decode('utf-8')
             self.database.insert(temperature =float(msg.payload))
         elif topic == "humidity":
             self.database.insert(humidity =float(msg.payload))
@@ -47,9 +60,8 @@ class ConnToSensors(mqtt.Client):
         self.username_pw_set(self.user, self.password)
         self.connect(self.server, self.port, 60)
         self.subscribe(sub_topic, 1)
-        print('subscribed this')
+        #print('subscribed this')
         self.loop_start()
-
         # rc = 0
         # while rc == 0:
         #     rc = self.loop()

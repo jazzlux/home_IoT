@@ -17,7 +17,7 @@
 
   <div class="row"style="margin-bottom: 50px;">
     <div class="col">
-      <div id="temp" style="margin-bottom: 50px;"><h3>temperature outside </h3></div>
+      <div id="temp" style="margin-bottom: 50px;"><h3>temperature outside </h3> <h3 id="tmp"></h3></div>
 
       </div>
 
@@ -53,10 +53,33 @@
 
 
 
-  <script>
+  <!-- <script>
   fetch('/temp_out')
-    .then(function(response) { return response.json(); })
-    .then(function(json) { console.log(json); })
+    .then(function(response) {
+      return response.json()
+    // Your code for handling the data you get from the API
+  })
+    .then(function(result) {
+
+      var temp = document.getElementById("tmp").innerText = result;
+
+  })
+    // .then(function(json) { console.log(json); })
+
+  </script> -->
+
+  <script>
+    const context = document.getElementById('tmp').innerText;
+    const source = new EventSource("/stream");
+
+    source.onmessage = function (event) {
+
+      const data = JSON.parse(event.data);
+      // var data = JSON.parse(event.data);
+      document.getElementById("tmp").innerText = data.value;
+      console.log(JSON.stringify(data));
+    }
+
 
   </script>
 
