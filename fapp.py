@@ -2,21 +2,19 @@ from flask import Flask, Response, render_template
 #from flask_bootstrap import Bootstrap
 from plotting import Plotting
 import io
-import base64
-import matplotlib.pyplot as plt
-import pygal
+# import base64
+# import matplotlib.pyplot as plt
+# import pygal
 from bokeh.resources import CDN
 import json
 from bokeh.embed import json_item
 from bokeh.embed import components
 from dotenv import load_dotenv
 import os
-import multiprocessing
 import gevent
 from gevent import sleep
-import random
 
-random.seed()
+
 
 load_dotenv()
 server_id = os.getenv("SERVER_ID")
@@ -25,7 +23,6 @@ server_user = os.getenv("SERVER_USER")
 server_key = os.getenv("SERVER_KEY")
 
 print(server_id, int(port_no), server_user, server_key)
-
 
 app = Flask(__name__)
 #bootstrap = Bootstrap(app)
@@ -52,14 +49,7 @@ app = Flask(__name__)
 def root():
     return render_template('home.html')
 
-# @app.route('/tes')
-# def test_json():
-#     from mqtt_connection import ConnToSensors
-#
-#     tmp_out=ConnToSensors(server_id, port_no, "newdb.db", server_user,server_key)
-#     msg_tes= tmp_out.call_web()
-#     print(msg_tes)
-#     return json.dumps(msg_tes)
+
 @app.route('/stream')
 def chart_data():
     def generate_random_data():
@@ -67,15 +57,9 @@ def chart_data():
         while True:
             y = str(mqtt_connection.temp_call())
             print(y)
-            # rndm = int(random.random() * 100)
-
             json_data = json.dumps(
                 {'value': str(y)})
             yield f"data:{json_data}\n\n"
-            # json_data = json.dumps(
-            #     {'value': rndm})
-            # yield f"data:{json_data}\n\n"
-            # #print(int(random.random() * 100))
             sleep(3)
 
     return Response(generate_random_data(), mimetype='text/event-stream')
@@ -86,11 +70,7 @@ def temp_outside():
 
     from mqtt_connection import ConnToSensors
     tmp_out=ConnToSensors(server_id, port_no, "newdb.db", server_user,server_key)
-    #print("proba" + json.dumps(tmp_out.run_sub("sensors/#")))
     msg_loop= tmp_out.run_sub("sensors/#")
-
-    # print(tmp_out.on_message())
-    # return jsonify(msg_loop)
 
     return json.dumps(msg_loop)
     sleep(1)

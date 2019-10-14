@@ -30,18 +30,10 @@ class ConnToSensors(mqtt.Client):
 
     def on_message(self, mqttc, obj, msg):
         global payload
-        #self.call_web()
         #print(msg.topic+" "+str(msg.qos)+" "+str(msg.payload))
         #print(self.database.view_table())
 
-        #print(topic)
         topic = os.path.basename(msg.topic)
-        #print(msg.payload)
-        #odczyt = self.call_web(msg.payload)
-
-
-
-        #print (next(odczyt))
         #print(topic,  msg.payload)
         if topic == "temperature" :
             payload = msg.payload.decode('utf-8')
@@ -52,8 +44,6 @@ class ConnToSensors(mqtt.Client):
             self.database.insert(temp_inside =float(msg.payload))
         elif topic == "hum_inside":
             self.database.insert(hum_inside =float(msg.payload))
-
-
 
 
     def run_sub(self, sub_topic):
