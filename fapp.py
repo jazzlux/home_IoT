@@ -1,5 +1,5 @@
 from flask import Flask, Response, render_template
-#from flask_bootstrap import Bootstrap
+# from flask_bootstrap import Bootstrap
 from plotting import Plotting
 import io
 # import base64
@@ -51,37 +51,34 @@ def root():
 
 
 @app.route('/stream')
-def chart_data():
-    def generate_random_data():
+def temp_read_stream():
+    def push_temp_read():
         import mqtt_connection
         while True:
             y = str(mqtt_connection.temp_call())
             print(y)
-            json_data = json.dumps(
-                {'value': str(y)})
-            yield f"data:{json_data}\n\n"
+            json_data = json.dumps({'value': str(y)})
+            yield "data:{}\n\n".format(json_data)
+            #yield f"data:{json_data}\n\n"
             sleep(3)
 
-    return Response(generate_random_data(), mimetype='text/event-stream')
+    return Response(push_temp_read(), mimetype='text/event-stream')
 
 
 @app.route('/temp_out')
 def temp_outside():
 
     from mqtt_connection import ConnToSensors
-    tmp_out=ConnToSensors(server_id, port_no, "newdb.db", server_user,server_key)
-    msg_loop= tmp_out.run_sub("sensors/#")
+    tmp_out = ConnToSensors(server_id, port_no, "newdb.db", server_user, server_key)
+    msg_loop = tmp_out.run_sub("sensors/#")
 
     return json.dumps(msg_loop)
     sleep(1)
 
 
 job1 = gevent.spawn(temp_outside)
-job2 = gevent.spawn(chart_data)
+job2 = gevent.spawn(temp_read_stream)
 gevent.wait([job1, job2])
-
-
-
 
 # @app.route('/plt')
 # def b_graph():
