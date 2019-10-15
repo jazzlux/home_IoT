@@ -1,6 +1,5 @@
 from flask import Flask, Response, render_template
 #from flask_bootstrap import Bootstrap
-from plotting import Plotting
 import io
 # import base64
 # import matplotlib.pyplot as plt
@@ -57,9 +56,8 @@ def chart_data():
         while True:
             y = str(mqtt_connection.temp_call())
             print(y)
-            json_data = json.dumps(
-                {'value': str(y)})
-            yield f"data:{json_data}\n\n"
+            json_data = json.dumps({'value': str(y)})
+            yield "data:{json_data}\n\n"
             sleep(3)
 
     return Response(generate_random_data(), mimetype='text/event-stream')
