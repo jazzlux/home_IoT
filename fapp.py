@@ -73,6 +73,7 @@ def temp_read_stream():
     return Response(push_temp_read(), mimetype='text/event-stream')
 
 
+
 @app.route('/temp_out')
 def temp_outside():
 
