@@ -25,9 +25,10 @@
         <div class="col">
           <h4>lights cortyard</h4>
           <div class="btn-group" role="group" aria-label="lights1">
-            <button type="button" class="btn btn-secondary">On</button>
-            <button type="button" class="btn btn-secondary">Off</button>
+            <button type="button" class="btn btn-outline-secondary" id="on">On</button>
+            <button type="button" class="btn btn-outline-secondary" aria-pressed="false" id="off">Off</button>
           </div>
+          <h5 id="state"></h5>
       </div>
 
   </div>
@@ -67,6 +68,31 @@
     // .then(function(json) { console.log(json); })
 
   </script> -->
+  <script>
+    function changeClass(){
+        document.getElementById("on").className = "btn btn-outline-secondary active";
+        document.getElementById("off").className = "btn btn-outline-secondary";
+    }
+    function changeClass_toggle(){
+        document.getElementById("off").className = "btn btn-outline-secondary active";
+        document.getElementById("on").className = "btn btn-outline-secondary";
+
+    }
+    var lights_on = document.getElementById("on");
+    var lights_off = document.getElementById("off");
+
+    lights_on.onclick = changeClass;
+    lights_off.onclick = changeClass_toggle;
+
+
+    // lights_off.onclick = function() {
+    //     document.getElementById("state").innerText = "off" ;
+    //     console.log(lights_off);
+    //   }
+
+
+  </script>
+
 
   <script>
     const context = document.getElementById('tmp').innerText;

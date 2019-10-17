@@ -55,12 +55,12 @@ def temp_read_stream():
     def push_temp_read():
         import mqtt_connection
         while True:
-            y = str(mqtt_connection.temp_call())
-            print(y)
-            json_data = json.dumps({'value': str(y)})
+            temperature = str(mqtt_connection.temp_result())
+            print(temperature)
+            json_data = json.dumps({'value': str(temperature)})
             yield "data:{}\n\n".format(json_data)
             #yield f"data:{json_data}\n\n"
-            sleep(3)
+            sleep(15)
 
     return Response(push_temp_read(), mimetype='text/event-stream')
 
