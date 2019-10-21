@@ -5,7 +5,7 @@ import os
 
 payload = 0
 
-def temp_call():
+def temp_result():
     return payload
 
 class ConnToSensors(mqtt.Client):

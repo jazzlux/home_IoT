@@ -23,15 +23,17 @@
 
 
         <div class="col">
-          <h4>lights cortyard</h4>
-          <div class="btn-group" role="group" aria-label="lights1">
-            <button type="button" class="btn btn-secondary">On</button>
-            <button type="button" class="btn btn-secondary">Off</button>
+          <h4>lights brasil</h4>
+          <div class="btn-group" role="group" aria-label="lights1" id="switch1">
+            <button onclick="changeState(event)" id="on" type="button" class="btn btn-outline-secondary">On</button>
+            <button onclick="changeState(event)" id="off" type="button" class="btn btn-outline-secondary">Off</button>
+
+            <!-- <button type="button" class="btn btn-outline-secondary" id="on">On</button>
+            <button type="button" class="btn btn-outline-secondary" aria-pressed="false" id="off">Off</button> -->
+
           </div>
       </div>
-
-  </div>
-
+      </div>
 
 
     <div class="row">
@@ -67,6 +69,39 @@
     // .then(function(json) { console.log(json); })
 
   </script> -->
+
+
+  <script>
+
+    const button_pressed = "btn btn-outline-secondary active"
+    const button_default = "btn btn-outline-secondary"
+
+
+
+    function changeState(event) {
+      // reusable function working as a switch. Works with bootstrap button elements
+      // every button needs unique ID, the rest is auto.
+
+      var which_switch = event.target;
+      var which_id = which_switch.id;
+      var which_parent = which_switch.parentElement.id;
+
+      if (which_switch.className == button_default){
+        document.getElementById(which_id).className = button_pressed;
+        var toggle0 = document.getElementById(which_parent).children[0].id;
+        var toggle1 = document.getElementById(which_parent).children[1].id;
+        if (which_id == toggle1){
+          document.getElementById(toggle0).className = button_default;
+        } else {
+          document.getElementById(toggle1).className = button_default;
+        }
+      } else {
+        document.getElementById(which_id).className = button_default;
+      }
+    }
+
+  </script>
+
 
   <script>
     const context = document.getElementById('tmp').innerText;

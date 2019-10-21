@@ -1,10 +1,7 @@
 from flask import Flask, Response, render_template
-<<<<<<< HEAD
-#from flask_bootstrap import Bootstrap
-=======
+
 # from flask_bootstrap import Bootstrap
 from plotting import Plotting
->>>>>>> ecc87b6f7fa93cb77deba659d2ebddadfffd43c1
 import io
 # import base64
 # import matplotlib.pyplot as plt
@@ -62,13 +59,16 @@ def temp_read_stream():
             y = str(mqtt_connection.temp_call())
             print(y)
             json_data = json.dumps({'value': str(y)})
-<<<<<<< HEAD
-            yield "data:{json_data}\n\n"
-=======
             yield "data:{}\n\n".format(json_data)
             #yield f"data:{json_data}\n\n"
->>>>>>> ecc87b6f7fa93cb77deba659d2ebddadfffd43c1
             sleep(3)
+            temperature = str(mqtt_connection.temp_result())
+            print(temperature)
+            json_data = json.dumps({'value': str(temperature)})
+            yield "data:{}\n\n".format(json_data)
+            #yield f"data:{json_data}\n\n"
+            sleep(15)
+
 
     return Response(push_temp_read(), mimetype='text/event-stream')
 
