@@ -69,21 +69,22 @@ def dht_readings():
 
 
 
-#do_connect()
-#print(dht_readings())
+do_connect()
 
 
 def mqtt_publish():
     c = MQTTClient(CLIENT_ID, SERVER, PORT, USER, PASSWORD, keepalive=0)
     c.connect()
-    c.publish(b'tempperature', (b'{0:3.1f}'.format(temp)))
-    c.publish(b'humidity', (b'{0:3.1f}' .format(hum)))
+    c.publish(b'sensors/temperature', (b'{0:3.1f}'.format(temp)))
+    c.publish(b'sensors/humidity', (b'{0:3.1f}' .format(hum)))
     blue_led_blink(4)
     c.disconnect()
 
 
 def main(period):
     while True:
+        dht_readings()
+    
         mqtt_publish()
         time.sleep(period)
 

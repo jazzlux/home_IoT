@@ -1,7 +1,10 @@
+from gevent import monkey
+monkey.patch_all()
 from flask import Flask, Response, render_template
 # from flask_bootstrap import Bootstrap
 from plotting import Plotting
 import io
+import signal
 # import base64
 # import matplotlib.pyplot as plt
 # import pygal
@@ -13,6 +16,9 @@ from dotenv import load_dotenv
 import os
 import gevent
 from gevent import sleep
+from mqtt_connection import ConnToSensors
+import mqtt_connection
+
 
 
 
@@ -53,11 +59,15 @@ def root():
 @app.route('/stream')
 def temp_read_stream():
     def push_temp_read():
-        import mqtt_connection
+
         while True:
-            temperature = str(mqtt_connection.temp_result())
+            temperature = str(mqtt_connection.payload)
+            humidity = str(mqtt_connection.hum)
             print(temperature)
-            json_data = json.dumps({'value': str(temperature)})
+            print(humidity)
+            # json_data = json.dumps({'value': str(temperature)})
+            json_data = json.dumps({'temp': str(temperature), 'hum': str(humidity)})
+            # yield "data:{}\n\n".format(json_data)
             yield "data:{}\n\n".format(json_data)
             #yield f"data:{json_data}\n\n"
             sleep(15)
@@ -66,20 +76,20 @@ def temp_read_stream():
 
 
 
-@app.route('/temp_out')
+#@app.route('/temp_out')
 def temp_outside():
-
-    from mqtt_connection import ConnToSensors
     tmp_out = ConnToSensors(server_id, port_no, "newdb.db", server_user, server_key)
     msg_loop = tmp_out.run_sub("sensors/#")
-
-    return json.dumps(msg_loop)
-    sleep(1)
-
+    #return "json"
+    sleep(6)
 
 job1 = gevent.spawn(temp_outside)
 job2 = gevent.spawn(temp_read_stream)
-gevent.wait([job1, job2])
+
+# ev = gevent.joinall([job1, job2], timeout=10)
+
+#gevent.signal(signal.SIGQUIT, gevent.kill)
+
 
 # @app.route('/plt')
 # def b_graph():
@@ -91,7 +101,7 @@ gevent.wait([job1, job2])
 
 @app.route('/pl')
 def pl_bokeh_js():
-    bkh = Plotting('oop.db')
+    bkh = Plotting('newdb.db')
     rend1 = bkh.bokeh_plot(1, 2)
     return json.dumps(json_item(rend1))
 
@@ -103,3 +113,5 @@ def pl_bokeh_js2():
 
 if __name__=='__main__':
     app.run(debug=True)
+
+    gevent.wait([job1, job2])
