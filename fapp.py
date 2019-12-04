@@ -55,6 +55,9 @@ app = Flask(__name__)
 def root():
     return render_template('home.html')
 
+@app.route('/analitix')
+def graps():
+    return render_template('analitix.html')
 
 @app.route('/stream')
 def temp_read_stream():
@@ -78,7 +81,7 @@ def temp_read_stream():
 
 #@app.route('/temp_out')
 def temp_outside():
-    tmp_out = ConnToSensors(server_id, port_no, "newdb.db", server_user, server_key)
+    tmp_out = ConnToSensors(server_id, port_no, "4.11.db", server_user, server_key)
     msg_loop = tmp_out.run_sub("sensors/#")
     #return "json"
     sleep(6)
@@ -101,17 +104,16 @@ job2 = gevent.spawn(temp_read_stream)
 
 @app.route('/pl')
 def pl_bokeh_js():
-    bkh = Plotting('newdb.db')
+    bkh = Plotting('4.11.db')
     rend1 = bkh.bokeh_plot(1, 2)
     return json.dumps(json_item(rend1))
 
 @app.route('/pl2')
 def pl_bokeh_js2():
-    bkh = Plotting('oop.db')
+    bkh = Plotting('4.11.db')
     rend2 = bkh.bokeh_plot(1, 3)
     return json.dumps(json_item(rend2))
 
 if __name__=='__main__':
     app.run(debug=True)
-
     gevent.wait([job1, job2])

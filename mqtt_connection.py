@@ -36,12 +36,11 @@ class ConnToSensors(mqtt.Client):
         #print(self.database.view_table())
 
         topic = os.path.basename(msg.topic)
-        # print(topic,  msg.payload)
+        print(topic,  msg.payload)
         if topic == "temperature" :
             payload = msg.payload.decode('utf-8')
             # print("to database?")
             self.database.insert(temperature = float(msg.payload))
-            print("worked")
         elif topic == "humidity":
             hum = msg.payload.decode('utf-8')
             self.database.insert(humidity = float(msg.payload))
