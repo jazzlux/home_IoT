@@ -6,6 +6,8 @@ import time
 
 payload = 0
 hum = 0
+temp_inside = 0
+hum_inside = 0
 
 
 class ConnToSensors(mqtt.Client):
@@ -32,11 +34,15 @@ class ConnToSensors(mqtt.Client):
     def on_message(self, mqttc, obj, msg):
         global payload
         global hum
+        global temp_inside
+        global hum_inside
         #print(msg.topic+" "+str(msg.qos)+" "+str(msg.payload))
         #print(self.database.view_table())
 
         topic = os.path.basename(msg.topic)
-        print(topic,  msg.payload)
+        print(topic)
+        #print(topic,  msg.payload)
+
         if topic == "temperature" :
             payload = msg.payload.decode('utf-8')
             # print("to database?")
@@ -45,10 +51,13 @@ class ConnToSensors(mqtt.Client):
             hum = msg.payload.decode('utf-8')
             self.database.insert(humidity = float(msg.payload))
         elif topic == "temp_inside":
+            temp_inside = msg.payload.decode('utf-8')
             self.database.insert(temp_inside = float(msg.payload))
+            self.database.close()
         elif topic == "hum_inside":
+            hum_inside = msg.payload.decode('utf-8')
             self.database.insert(hum_inside = float(msg.payload))
-
+            self.database.close()
 
     def run_sub(self, sub_topic):
         self.username_pw_set(self.user, self.password)

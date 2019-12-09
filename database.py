@@ -12,7 +12,7 @@ class Database():
 
 
     def insert(self, temperature=None, humidity=None, temp_inside=None, hum_inside=None):
-        global last_id
+
         self.creation_date = datetime.now(tz=None)
         self.datetime_stamp = self.creation_date.strftime('%s') #integer datetime object
         self.cursor.execute("INSERT INTO temps VALUES (NULL, ?,?,?,?,?)", (self.datetime_stamp, temperature, humidity, temp_inside, hum_inside))

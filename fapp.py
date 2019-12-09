@@ -28,6 +28,8 @@ port_no = int(os.getenv("PORT_NO"))
 server_user = os.getenv("SERVER_USER")
 server_key = os.getenv("SERVER_KEY")
 
+database_name = "test_close_db.db"
+
 print(server_id, int(port_no), server_user, server_key)
 
 app = Flask(__name__)
@@ -64,8 +66,8 @@ def temp_read_stream():
     def push_temp_read():
 
         while True:
-            temperature = str(mqtt_connection.payload)
-            humidity = str(mqtt_connection.hum)
+            temperature = str(mqtt_connection.temp_inside)
+            humidity = str(mqtt_connection.hum_inside)
             print(temperature)
             print(humidity)
             # json_data = json.dumps({'value': str(temperature)})
@@ -81,7 +83,7 @@ def temp_read_stream():
 
 #@app.route('/temp_out')
 def temp_outside():
-    tmp_out = ConnToSensors(server_id, port_no, "4.11.db", server_user, server_key)
+    tmp_out = ConnToSensors(server_id, port_no, database_name, server_user, server_key)
     msg_loop = tmp_out.run_sub("sensors/#")
     #return "json"
     sleep(6)
@@ -104,14 +106,14 @@ job2 = gevent.spawn(temp_read_stream)
 
 @app.route('/pl')
 def pl_bokeh_js():
-    bkh = Plotting('4.11.db')
-    rend1 = bkh.bokeh_plot(1, 2)
+    bkh = Plotting(database_name)
+    rend1 = bkh.bokeh_plot(1, 4)
     return json.dumps(json_item(rend1))
 
 @app.route('/pl2')
 def pl_bokeh_js2():
-    bkh = Plotting('4.11.db')
-    rend2 = bkh.bokeh_plot(1, 3)
+    bkh = Plotting(database_name)
+    rend2 = bkh.bokeh_plot(1, 5)
     return json.dumps(json_item(rend2))
 
 if __name__=='__main__':
