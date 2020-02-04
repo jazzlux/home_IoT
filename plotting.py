@@ -90,6 +90,6 @@ class Plotting:
 
 
 
-if __name__=='__main__':
-    ploting = Plotting("oop.db")
-    ploting.temp_hum()
+# if __name__=='__main__':
+    # ploting = Plotting("oop.db")
+    # ploting.temp_hum()

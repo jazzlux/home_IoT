@@ -1,12 +1,14 @@
 import paho.mqtt.client as mqtt
 from database import Database
 import os
+import time
 
 
 payload = 0
+hum = 0
+temp_inside = 0
+hum_inside = 0
 
-def temp_result():
-    return payload
 
 class ConnToSensors(mqtt.Client):
 
@@ -20,6 +22,7 @@ class ConnToSensors(mqtt.Client):
         self.database = Database(database_name)
 
 
+
     def on_connect(self, mqttc, obj, flags, rc):
         print("rc: "+str(rc))
 
@@ -30,21 +33,29 @@ class ConnToSensors(mqtt.Client):
 
     def on_message(self, mqttc, obj, msg):
         global payload
+        global hum
+        global temp_inside
+        global hum_inside
         #print(msg.topic+" "+str(msg.qos)+" "+str(msg.payload))
         #print(self.database.view_table())
 
         topic = os.path.basename(msg.topic)
-        #print(topic,  msg.payload)
+        print(topic,  msg.payload)
         if topic == "temperature" :
             payload = msg.payload.decode('utf-8')
-            self.database.insert(temperature =float(msg.payload))
+            # print("to database?")
+            self.database.insert(temperature = float(msg.payload))
         elif topic == "humidity":
-            self.database.insert(humidity =float(msg.payload))
+            hum = msg.payload.decode('utf-8')
+            self.database.insert(humidity = float(msg.payload))
         elif topic == "temp_inside":
-            self.database.insert(temp_inside =float(msg.payload))
+            temp_inside = msg.payload.decode('utf-8')
+            self.database.insert(temp_inside = float(msg.payload))
+            self.database.close()
         elif topic == "hum_inside":
-            self.database.insert(hum_inside =float(msg.payload))
-
+            hum_inside = msg.payload.decode('utf-8')
+            self.database.insert(hum_inside = float(msg.payload))
+            self.database.close()
 
     def run_sub(self, sub_topic):
         self.username_pw_set(self.user, self.password)
@@ -56,11 +67,27 @@ class ConnToSensors(mqtt.Client):
         # while rc == 0:
         #     rc = self.loop()
         #print("pp")
-        #self.loop_stop()
+        # self.loop_stop()
 
         #return rc
 
+    # def run_sub(self, sub_topic):
+    #     self.username_pw_set(self.user, self.password)
+    #     self.connect(self.server, self.port, 60)
+    #     self.subscribe(sub_topic, 1)
+    #     print('subscribed this')
+    #     # self.loop_start()
+    #     rc = 0
+    #     while rc == 0:
+    #         rc = self.loop()
+    #     #print("pp")
+    #     # self.loop_stop()
+    #
+    #     return rc
+
 
 if __name__ == '__main__':
-    mqttc = ConnToSensors("m24.cloudmqtt.com", 17208, "newdb.db", "dvukmvfa","JpfjsyzaE7Le")
-    rc = mqttc.run_sub("sensors/#")
+    # mqttc = ConnToSensors("m24.cloudmqtt.com", 17208, "newdb.db", "dvukmvfa","JpfjsyzaE7Le")
+    # rc = mqttc.run_sub("sensors/#")
+    d = Database("8.12.db")
+    print(d.view_table())

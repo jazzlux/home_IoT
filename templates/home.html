@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
-{% block graphs %}
+{% block readings %}
 
-<title>home IoT</title>
+<!-- <title>home IoT</title> -->
 
 
 <div class="container">
   <nav class="nav justify-content-end" style="margin-bottom: 50px;">
     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">houme IoT</a>
-    <a class="nav-link" href="#">analytics</a>
+    <a class="nav-link" href="analitix">analytics</a>
   </nav>
 </div>
 
@@ -17,9 +17,11 @@
 
   <div class="row"style="margin-bottom: 50px;">
     <div class="col">
-      <div id="temp" style="margin-bottom: 50px;"><h3>temperature outside </h3><h3 id="tmp"></h3></div>
+      <div id="temp" style="margin-bottom: 50px;"><h4>temperature</h4><h3 id="tmp"></h3></div>
+      <div id="humidity" style="margin-bottom: 50px;"><h4>humidity</h4><h3 id="hum"></h3></div>
 
-      </div>
+  </div>
+
 
 
         <div class="col">
@@ -36,15 +38,18 @@
       </div>
 
 
-    <div class="row">
+    <!-- <div class="row">
+
       <div class="col"  >
             <div id="myplot"><p>temperature</p></div>
-    </div>
+      </div>
 
     <div class="col">
-          <div id="myplot2" style="margin-bottom: 50px;"><p>humidity</p></div>
+            <div id="myplot2" style="margin-bottom: 50px;"><p>humidity</p></div>
     </div>
+
   </div>
+  <!-- <button id="refresh" onclick="refresh_func()">refresh</button> -->
 </div>
 
 <!-- <div class='bokeh'>
@@ -76,8 +81,6 @@
     const button_pressed = "btn btn-outline-secondary active"
     const button_default = "btn btn-outline-secondary"
 
-
-
     function changeState(event) {
       // reusable function working as a switch. Works with bootstrap button elements
       // every button needs unique ID, the rest is auto.
@@ -99,33 +102,44 @@
         document.getElementById(which_id).className = button_default;
       }
     }
-
   </script>
 
 
   <script>
     const context = document.getElementById('tmp').innerText;
+    // const hum = document.getElementById('hum').innerText;
     const source = new EventSource("/stream");
 
     source.onmessage = function (event) {
       const data = JSON.parse(event.data);
+      // const data_hum = JSON.parse(event.data);
       // var data = JSON.parse(event.data);
-      document.getElementById("tmp").innerText = data.value;
       console.log(JSON.stringify(data));
+      document.getElementById("tmp").innerText = data.temp;
+      document.getElementById("hum").innerText = data.hum;
     }
 
   </script>
 
   <script>
+    // setInterval(function(){ alert("Hello"); }, 3000);
+    // function refresh_func() {
+    //   document.getElementById("refresh").innerText = "changed"
+    //   console.log("click")
+    // }
+  </script>
+
+  <!-- <script>
   fetch('/pl')
     .then(function(response) { return response.json(); })
     .then(function(item) { Bokeh.embed.embed_item(item, "myplot"); })
   </script>
+
   <script>
-  fetch('/pl2')
+    fetch('/pl2')
     .then(function(response) { return response.json(); })
     .then(function(item) { Bokeh.embed.embed_item(item, "myplot2"); })
-  </script>
+  </script> -->
 
 
-{% endblock graphs%}
+{% endblock readings %}
