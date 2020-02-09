@@ -117,5 +117,9 @@ def pl_bokeh_js2():
     return json.dumps(json_item(rend2))
 
 if __name__=='__main__':
+<<<<<<< HEAD
     app.run(debug=True)
+=======
+    app.run("192.168.1.85")
+>>>>>>> c64c32ade6d2167c66f796f56d4a05f5e2b79264
     gevent.wait([job1, job2])

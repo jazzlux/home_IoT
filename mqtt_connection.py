@@ -40,9 +40,7 @@ class ConnToSensors(mqtt.Client):
         #print(self.database.view_table())
 
         topic = os.path.basename(msg.topic)
-        print(topic)
-        #print(topic,  msg.payload)
-
+        print(topic,  msg.payload)
         if topic == "temperature" :
             payload = msg.payload.decode('utf-8')
             # print("to database?")
@@ -53,12 +51,11 @@ class ConnToSensors(mqtt.Client):
         elif topic == "temp_inside":
             temp_inside = msg.payload.decode('utf-8')
             self.database.insert(temp_inside = float(msg.payload))
-            #self.database.close()
+            self.database.close()
         elif topic == "hum_inside":
             hum_inside = msg.payload.decode('utf-8')
             self.database.insert(hum_inside = float(msg.payload))
-            #self.database.close()
-
+            self.database.close()
 
     def run_sub(self, sub_topic):
         self.username_pw_set(self.user, self.password)
@@ -92,5 +89,5 @@ class ConnToSensors(mqtt.Client):
 if __name__ == '__main__':
     # mqttc = ConnToSensors("m24.cloudmqtt.com", 17208, "newdb.db", "dvukmvfa","JpfjsyzaE7Le")
     # rc = mqttc.run_sub("sensors/#")
-    d = Database("newdb.db")
+    d = Database("8.12.db")
     print(d.view_table())
