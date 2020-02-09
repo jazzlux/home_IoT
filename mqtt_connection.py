@@ -53,11 +53,12 @@ class ConnToSensors(mqtt.Client):
         elif topic == "temp_inside":
             temp_inside = msg.payload.decode('utf-8')
             self.database.insert(temp_inside = float(msg.payload))
-            self.database.close()
+            #self.database.close()
         elif topic == "hum_inside":
             hum_inside = msg.payload.decode('utf-8')
             self.database.insert(hum_inside = float(msg.payload))
-            self.database.close()
+            #self.database.close()
+
 
     def run_sub(self, sub_topic):
         self.username_pw_set(self.user, self.password)

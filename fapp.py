@@ -86,7 +86,7 @@ def temp_outside():
     tmp_out = ConnToSensors(server_id, port_no, database_name, server_user, server_key)
     msg_loop = tmp_out.run_sub("sensors/#")
     #return "json"
-    sleep(6)
+    sleep(10)
 
 job1 = gevent.spawn(temp_outside)
 job2 = gevent.spawn(temp_read_stream)

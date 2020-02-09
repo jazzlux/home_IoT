@@ -15,10 +15,14 @@ class Database():
 
         self.creation_date = datetime.now(tz=None)
         self.datetime_stamp = self.creation_date.strftime('%s') #integer datetime object
+        #self.connection
+        self.cursor = self.connection.cursor()
         self.cursor.execute("INSERT INTO temps VALUES (NULL, ?,?,?,?,?)", (self.datetime_stamp, temperature, humidity, temp_inside, hum_inside))
         self.connection.commit()
-        self.cursor.lastrowid = last_id
-
+        #print("connection commiting")
+        #self.cursor.lastrowid = last_id
+        #self.connection.close()
+        #print("connection closed")
 
     def view_table(self):
 
