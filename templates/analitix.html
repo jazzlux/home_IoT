@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block graphs %}
+
+
+
+<div class="container">
+  <nav class="nav justify-content-end" style="margin-bottom: 50px;">
+    <a class="nav-link" href="/" tabindex="-1" aria-disabled="true">houme IoT</a>
+    <a class="nav-link disabled" href="#">analytics</a>
+  </nav>
+</div>
+
+
+<div class="container">
+<div class="row">
+        <div id="myplot"><p>temperature</p></div>
+  </div>
+  <div class="row">
+
+        <div id="myplot2"><p>humidity</p></div>
+</div>
+</div>
+<!-- <button id="refresh" onclick="refresh_func()">refresh</button> -->
+
+
+
+
+
+<script>
+fetch('/pl')
+  .then(function(response) { return response.json(); })
+  .then(function(item) { Bokeh.embed.embed_item(item, "myplot"); })
+</script>
+
+<script>
+  fetch('/pl2')
+  .then(function(response) { return response.json(); })
+  .then(function(item) { Bokeh.embed.embed_item(item, "myplot2"); })
+</script>
+
+
+{% endblock graphs %}
