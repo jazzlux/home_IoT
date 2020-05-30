@@ -12,13 +12,13 @@ blue_led = Pin(2, Pin.OUT, value=1)
 led = Pin(4, Pin.OUT, value=1)
 online_led = Pin(5, Pin.OUT)
 
-# SERVER = "m24.cloudmqtt.com"
+# SERVER = ""
 SERVER = "192.168.1.85"
 CLIENT_ID = 'ESP' #sprawdzic czy to ma znaczenie (duze/male litery)
 PORT = 1883
-# PORT = 17208
-# USER = "dvukmvfa"
-# PASSWORD = "JpfjsyzaE7Le"
+# PORT =
+# USER = ""
+# PASSWORD = ""
 TOPIC = b"sensor"
 
 
