@@ -16,8 +16,8 @@ online_led = Pin(5, Pin.OUT)
 SERVER = "192.168.1.85"
 CLIENT_ID = 'ESP' #sprawdzic czy to ma znaczenie (duze/male litery)
 PORT = 1883
-#USER = "dvukmvfa"
-#PASSWORD = "JpfjsyzaE7Le"
+#USER = ""
+#PASSWORD = ""
 TOPIC = b"sensor"
 
 
@@ -28,7 +28,7 @@ def do_connect():
     if not sta_if.isconnected():
         print('connecting to network...')
         sta_if.active(True)
-        sta_if.connect('ADSLPT-TR2355FF', '4B781E8D0B')
+        sta_if.connect('', '')
         while not sta_if.isconnected():
             pass
     print('network config:', sta_if.ifconfig())
